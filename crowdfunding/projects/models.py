@@ -4,6 +4,16 @@ from django.db import models
 
 # Create your models here.
 
+class Pledge(models.Model):
+    amount = models.IntegerField()
+    comment = models.CharField(max_length=500)
+    anonymous = models.BooleanField()
+    project = models.ForeignKey(
+        'Project',on_delete=models.CASCADE,
+        related_name='pledges'
+    )
+    supporter = models.CharField(max_length=200)
+
 class Project(models.Model):
     title = models.CharField(max_length=500)
     description = models.TextField()
