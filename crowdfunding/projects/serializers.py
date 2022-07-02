@@ -25,6 +25,7 @@ class PledgeDetailSerializer(PledgeSerializer):
 class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     title = serializers.CharField(max_length=500)
+    description = serializers.CharField(max_length=500)
     goal = serializers.IntegerField()
     image = serializers.URLField()
     is_open = serializers.BooleanField()
