@@ -2,14 +2,11 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge
-from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
+from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer, PledgeDetailSerializer
 from django.http import Http404
 from rest_framework import status, permissions
 from .permissions import IsOwnerOrReadOnly
 class PledgeList(APIView):
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly
-        ]
     def get(self,request):
         pledges = Pledge.objects.all()
         serializer = PledgeSerializer(pledges, many=True)
@@ -18,7 +15,7 @@ class PledgeList(APIView):
     def post(self, request):
         seriallizer = PledgeSerializer(data=request.data)
         if seriallizer.is_valid():
-            seriallizer.save()
+            seriallizer.save(supporter=request.user)
             return Response(
                 seriallizer.data,
                 status=status.HTTP_201_CREATED
@@ -33,7 +30,7 @@ class PledgeDetail(APIView):
         ]
     def get_object(self, pk):
         try:
-            pledge = pledge.objects.get(pk=pk)
+            pledge = Pledge.objects.get(pk=pk)
             self.check_object_permissions(self.request, pledge)
             return pledge
         except Pledge.DoesNotExist:
@@ -54,6 +51,19 @@ class PledgeDetail(APIView):
             )
         if serializer.is_valid():
             serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    def delete(self, request, pk):
+        pledge = self.get_object(pk)
+        pledge.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
  # /projects
 class ProjectList(APIView):
@@ -107,3 +117,8 @@ class ProjectDetail(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    def delete(self, request, pk):
+        project = self.get_object(pk)
+        project.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)   

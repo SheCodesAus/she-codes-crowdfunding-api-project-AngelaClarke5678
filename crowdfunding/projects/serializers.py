@@ -6,7 +6,8 @@ class PledgeSerializer(serializers.Serializer):
     amount = serializers.IntegerField()
     comment = serializers.CharField(max_length=500)
     anonymous = serializers.BooleanField()
-    supporter = serializers.CharField(max_length=200)
+    #supporter = serializers.CharField(max_length=200)
+    supporter = serializers.ReadOnlyField(source='supporter.id') 
     project_id = serializers.IntegerField()
 
     def create(self, validated_data):
@@ -16,9 +17,8 @@ class PledgeDetailSerializer(PledgeSerializer):
  # so you can update a single pledge
     def update(self, instance, validated_data):
         instance.amount = validated_data.get('amount', instance.amount)
-        instance.comment = validated_data.get('comment',instance.description)
+        instance.comment = validated_data.get('comment',instance.comment)
         instance.supporter = validated_data.get('supporter', instance.supporter)
-        instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance
 
