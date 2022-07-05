@@ -12,7 +12,6 @@ class CustomUserSerializer(serializers.Serializer):
         return CustomUser.objects.create(**validated_data)
 
 class CustomUserDetailSerializer(CustomUserSerializer):
- # so you can update a single pledge
     def update(self, instance, validated_data):
         instance.bio = validated_data.get('bio', instance.bio)
         instance.profile_image = validated_data.get('profile image',instance.profile_image)
