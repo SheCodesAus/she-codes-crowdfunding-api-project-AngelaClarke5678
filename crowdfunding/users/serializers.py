@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser
+from django.contrib.auth.hashers import make_password
 
 class CustomUserSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -7,8 +8,10 @@ class CustomUserSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=200)
     bio = serializers.CharField(max_length=5000)
     profile_image = serializers.URLField()
+    password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data.get('password'))
         return CustomUser.objects.create(**validated_data)
 
 class CustomUserDetailSerializer(CustomUserSerializer):

@@ -4,7 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import CustomUser
+from .permissions import IsOwnerOrReadOnly, IsAuthorOrReadOnly
 from .serializers import CustomUserSerializer, CustomUserDetailSerializer
+
 
 class CustomUserList(APIView):
     # Get request
