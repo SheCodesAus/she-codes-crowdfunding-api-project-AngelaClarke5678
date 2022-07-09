@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from .models import CustomUser
-from .permissions import  IsOwnerOrReadOnly
 from .serializers import CustomUserSerializer, CustomUserDetailSerializer
 
 
@@ -41,6 +40,8 @@ class CustomUserDetail(APIView):
     def put(self, request, pk):
         user = self.get_object(pk)
         data = request.data
+        if user != request.user and not request.user.is_superuser:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         serializer = CustomUserDetailSerializer(
             instance=user,
             data=data,
