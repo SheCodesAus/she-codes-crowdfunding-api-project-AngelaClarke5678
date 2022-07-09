@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from .models import CustomUser
-from .permissions import IsOwnerOrReadOnly, IsAuthorOrReadOnly
+from .permissions import  IsOwnerOrReadOnly
 from .serializers import CustomUserSerializer, CustomUserDetailSerializer
 
 
@@ -24,6 +24,7 @@ class CustomUserList(APIView):
 
  # users/<pk>
 class CustomUserDetail(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_object(self,pk):
         try:
@@ -32,6 +33,7 @@ class CustomUserDetail(APIView):
             raise Http404
     #get request
     def get(self,request,pk):
+        
         user = self.get_object(pk)
         serializer = CustomUserSerializer(user)
         return Response(serializer.data)
