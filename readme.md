@@ -24,6 +24,19 @@ https://peaceful-wildwood-53690.herokuapp.com/users/
 
 ## How to Register a new user
 
+**JSON example file**
+
+```
+{
+	"title": "Fund a community garden on Smith Street",
+	"description": "Access to Healthy food is important for a growing community",
+	"goal": 1550,
+	"image": "https://via.placeholder.com/300.jpg",
+	"is_open": true,
+	"date_created": "2022-04-20T14:28:23.382748Z"
+}
+```
+
 ## How to Create a new project
 
 ## API Specification
