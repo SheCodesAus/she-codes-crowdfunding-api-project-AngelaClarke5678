@@ -44,7 +44,7 @@ https://peaceful-wildwood-53690.herokuapp.com/users/
 ```
 {
         "username": "Username",
-		"password": "Password",
+	    "password": "Password",
         "email": "email@email.com.au",
         "bio": "I am passionate about supporting access to fresh food",
         "profile_image": "https://via.placeholder.com/300.jpg"
